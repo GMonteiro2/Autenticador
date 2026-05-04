@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #0f0f0f; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .card { background: #1a1a1a; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; }
+    h1 { font-size: 1.8rem; margin-bottom: 8px; }
+    p { color: #aaa; margin-bottom: 30px; font-size: 0.9rem; }
+    label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: #ccc; }
+    input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #333; background: #0f0f0f; color: #fff; font-size: 1rem; margin-bottom: 20px; }
+    input:focus { outline: none; border-color: #4f46e5; }
+    button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #4f46e5; color: #fff; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #4338ca; }
+    .google { background: #fff; color: #000; margin-top: 12px; }
+    .google:hover { background: #ddd; }
+    .msg { margin-top: 16px; text-align: center; font-size: 0.9rem; color: #f87171; }
+    .link { text-align: center; margin-top: 20px; font-size: 0.9rem; color: #aaa; }
+    .link a { color: #4f46e5; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>👋 Bem-vindo</h1>
+    <p>Entre na sua conta para continuar</p>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="seu@email.com">
+
+    <label>Senha</label>
+    <input type="password" id="password" placeholder="••••••••">
+
+    <button onclick="login()">Entrar</button>
+    <button class="google" onclick="window.location.href='/api/auth/oauth'">🔍 Entrar com Google</button>
+
+    <div class="msg" id="msg"></div>
+    <div class="link">Não tem conta? <a href="/register">Cadastre-se</a></div>
+    <div class="link"><a href="/forgot">Esqueci minha senha</a></div>
+  </div>
+
+  <script>
+    async function login() {
+      const email = document.getElementById("email").value
+      const password = document.getElementById("password").value
+
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        localStorage.setItem("token", data.token)
+        window.location.href = "/profile"
+      } else {
+        document.getElementById("msg").textContent = data.message
+      }
+    }
+  </script>
+</body>
+</html>

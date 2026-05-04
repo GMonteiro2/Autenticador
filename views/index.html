@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Autenticador</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #0f0f0f; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { text-align: center; }
+    h1 { font-size: 2.5rem; margin-bottom: 10px; }
+    p { color: #aaa; margin-bottom: 40px; }
+    .buttons { display: flex; gap: 20px; justify-content: center; }
+    a { padding: 12px 30px; border-radius: 8px; text-decoration: none; font-size: 1rem; font-weight: bold; transition: 0.3s; }
+    .btn-login { background: #fff; color: #000; }
+    .btn-login:hover { background: #ddd; }
+    .btn-register { background: #4f46e5; color: #fff; }
+    .btn-register:hover { background: #4338ca; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 Autenticador</h1>
+    <p>Sistema de autenticação com JWT e OAuth</p>
+    <div class="buttons">
+      <a href="/login" class="btn-login">Login</a>
+      <a href="/register" class="btn-register">Cadastrar</a>
+    </div>
+  </div>
+</body>
+</html>

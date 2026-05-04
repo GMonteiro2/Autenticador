@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background: #0f0f0f; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .card { background: #1a1a1a; padding: 40px; border-radius: 12px; width: 100%; max-width: 400px; }
+    h1 { font-size: 1.8rem; margin-bottom: 30px; }
+    .info { margin-bottom: 16px; }
+    .info label { font-size: 0.8rem; color: #aaa; display: block; margin-bottom: 4px; }
+    .info p { font-size: 1rem; color: #fff; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.8rem; margin-top: 4px; }
+    .verified { background: #14532d; color: #4ade80; }
+    .unverified { background: #7f1d1d; color: #f87171; }
+    button { width: 100%; padding: 12px; border-radius: 8px; border: none; background: #ef4444; color: #fff; font-size: 1rem; font-weight: bold; cursor: pointer; margin-top: 30px; transition: 0.3s; }
+    button:hover { background: #dc2626; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>👤 Meu Perfil</h1>
+
+    <div class="info">
+      <label>Nome</label>
+      <p id="name">Carregando...</p>
+    </div>
+
+    <div class="info">
+      <label>Email</label>
+      <p id="email">Carregando...</p>
+    </div>
+
+    <div class="info">
+      <label>Status</label>
+      <span id="status" class="badge">Carregando...</span>
+    </div>
+
+    <div class="info">
+      <label>Membro desde</label>
+      <p id="created_at">Carregando...</p>
+    </div>
+
+    <button onclick="logout()">Sair</button>
+  </div>
+
+  <script>
+    async function loadProfile() {
+      const token = localStorage.getItem("token")
+
+      if (!token) {
+        window.location.href = "/login"
+        return
+      }
+
+      const res = await fetch("/api/auth/profile", {
+        headers: { "Authorization": `Bearer ${token}` }
+      })
+
+      if (!res.ok) {
+        window.location.href = "/login"
+        return
+      }
+
+      const data = await res.json()
+      const user = data.user
+
+      document.getElementById("name").textContent = user.name
+      document.getElementById("email").textContent = user.email
+
+      const status = document.getElementById("status")
+      if (user.is_verified) {
+        status.textContent = "✅ Verificado"
+        status.className = "badge verified"
+      } else {
+        status.textContent = "❌ Não verificado"
+        status.className = "badge unverified"
+      }
+
+      const date = new Date(user.created_at)
+      document.getElementById("created_at").textContent = date.toLocaleDateString("pt-BR")
+    }
+
+    function logout() {
+      localStorage.removeItem("token")
+      window.location.href = "/login"
+    }
+
+    loadProfile()
+  </script>
+</body>
+</html>
